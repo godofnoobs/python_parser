@@ -23,7 +23,7 @@ class Soup:
     def get_base_map(self):
         el = self.soup.h3
         category = el.a.get_text()
-        map = []
+        base_map = []
         while el.next_sibling:
             el = el.next_sibling
             if (el.name == 'h3'):
@@ -34,12 +34,12 @@ class Soup:
                     'subcategory': el.a.get_text(),
                     'link': url + el.a['href'],
                 }
-                map.append(rec)
-        return map
+                base_map.append(rec)
+        return base_map
 
     def get_pics_map(self, meta_obj):
         el = self.soup.figure
-        map = []
+        subcat_map = []
         while True:
             if (hasattr(el, 'name') and el.name == 'figure'):
                 rec = {
@@ -47,8 +47,8 @@ class Soup:
                     'subcategory': meta_obj['subcategory'],
                     'link': el.a['href']
                 }
-                map.append(rec)
+                subcat_map.append(rec)
             if (not hasattr(el, 'name') or not el.next_sibling):
                 break
             el = el.next_sibling
-        return map
+        return subcat_map

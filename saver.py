@@ -28,3 +28,10 @@ class Saver:
             res = file.read()
             file.close()
         return res
+
+    '''
+    def read_csv_file(self, path, schema):
+        with open(path, 'r', encoding='utf-8') as file:
+            file.write(txt)
+            file.close()
+    '''

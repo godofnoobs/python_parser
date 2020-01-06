@@ -7,7 +7,8 @@ default_params = {
     'dir_path': Path('./dist').resolve(),
     'base_url': 'https://tvoiraskraski.ru/%D0%B2%D1%81%D0%B5-%D1%80%D0%B0%D1%81%D0%BA%D1%80%D0%B0%D1%81%D0%BA%D0%B8',  # noqa: E501
     'base_html_path': Path('./dist/base.html').resolve(),
-    'global_map_file': Path('./dist/global_map.csv').resolve()
+    'global_map_file': Path('./dist/global_map.csv').resolve(),
+    'downloaded_map_file': Path('./dist/downloaded_map.csv').resolve(),
 }
 
 
@@ -32,10 +33,10 @@ class Controller:
 
         # parse
         self.parser.create_soup(html)
-        map = self.parser.get_base_map()
+        base_map = self.parser.get_base_map()
 
-        global_map = self.get_global_pics_map(map)
-
+        # get global map of all pics and store it into csv file
+        global_map = self.get_global_pics_map(base_map[:50])
         self.saver.save_obj_to_csv(global_map, self.params['global_map_file'])
 
     def get_base_html(self, url=None):
@@ -47,10 +48,10 @@ class Controller:
             html = self.saver.read_txt_file(base_html_file_path)
         return html
 
-    def get_global_pics_map(self, map):
+    def get_global_pics_map(self, base_map):
         global_map = []
         count = 1
-        for meta_obj in map:
+        for meta_obj in base_map:
             print(count)
             html = self.get_pics_page(meta_obj)
             subcat_map = self.get_subcat_map(html, meta_obj)
